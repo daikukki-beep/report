@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,10 +22,8 @@
 </head>
 <body>
   <h2 style="text-align:center">勤怠変更報告</h2>
-
   <label>名前</label>
   <input type="text" id="name" placeholder="例：田中 美咲">
-
   <label>所属部門</label>
   <select id="dept">
     <option value="">選択してください</option>
@@ -36,7 +33,6 @@
     <option>薬局</option>
     <option>リハビリテーション科</option>
   </select>
-
   <label>報告種別</label>
   <select id="type">
     <option value="">選択してください</option>
@@ -45,61 +41,39 @@
     <option>早退</option>
     <option>シフト変更</option>
   </select>
-
   <label>対象日</label>
   <input type="date" id="date">
-
   <label>理由・備考</label>
   <textarea id="note" rows="3" placeholder="任意"></textarea>
-
   <button id="btn" onclick="send()">送信する</button>
   <p id="msg"></p>
-
   <script>
-    const TOKEN    = "dBTYiTAuPe4fooFVz1NZ1gUxQsyt9lvMf/dsKnQFKfB/R8B8U6vIkJ2ylBkb0+ImXSH8DbFg97xhfkWluE75j81ZjaJOxRyVoGNaYIEkLAC11i4iUlSq4eRFMBV2NnSKjTGRR4StJGfOxejJ7ncbVAdB04t89/1O/w1cDnyilFU=";
-    const GROUP_ID = "C43b27229e9ecd2af6aac82e1faeaf831";
-
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzUnVDeYu4CMktFjSi5Eo9bcfsWJfMPvFxS0X28WNFMci10rf2iT97yn_bSshMgs4DbYQ/exec';
     async function send() {
       const name = document.getElementById('name').value.trim();
       const dept = document.getElementById('dept').value;
       const type = document.getElementById('type').value;
       const date = document.getElementById('date').value;
       const note = document.getElementById('note').value.trim();
-
       if (!name || !dept || !type || !date) {
         document.getElementById('msg').textContent = '必須項目をすべて入力してください。';
         return;
       }
-
       const btn = document.getElementById('btn');
       btn.disabled = true;
       btn.textContent = '送信中...';
-
-      const text = `【勤怠変更報告】\n氏名：${name}\n部門：${dept}\n種別：${type}\n対象日：${date}\n理由：${note || 'なし'}`;
-
       try {
-        const res = await fetch('https://script.google.com/macros/s/AKfycbzUnVDeYu4CMktFjSi5Eo9bcfsWJfMPvFxS0X28WNFMci10rf2iT97yn_bSshMgs4DbYQ/exec', {
+        await fetch(GAS_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + TOKEN
-          },
-          body: JSON.stringify({
-            to: GROUP_ID,
-            messages: [{ type: 'text', text: text }]
-          })
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, dept, type, date, note })
         });
-
-        if (res.ok) {
-          document.getElementById('msg').textContent = '送信しました。';
-          document.getElementById('msg').style.color = 'green';
-        } else {
-          throw new Error('送信失敗: ' + res.status);
-        }
-      } catch (e) {
-        document.getElementById('msg').textContent = 'エラーが発生しました。管理者に連絡してください。';
+        document.getElementById('msg').textContent = '送信しました。';
+        document.getElementById('msg').style.color = 'green';
+      } catch(e) {
+        document.getElementById('msg').textContent = 'エラーが発生しました。';
         document.getElementById('msg').style.color = 'red';
-        console.error(e);
       } finally {
         btn.disabled = false;
         btn.textContent = '送信する';
@@ -108,18 +82,3 @@
   </script>
 </body>
 </html>
-EOF
-echo "done"
-出力
-done
-
-
-
-Presented file
-
-
-
-
-
-
-完了
