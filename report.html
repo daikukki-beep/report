@@ -1,0 +1,126 @@
+bash
+cat > /mnt/user-data/outputs/report.html << 'EOF'
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>勤怠変更報告</title>
+  <style>
+    body { font-family: sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
+    label { display: block; font-size: 14px; color: #555; margin-top: 16px; }
+    input, select, textarea {
+      width: 100%; padding: 10px; margin-top: 4px; font-size: 16px;
+      border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;
+    }
+    button {
+      width: 100%; margin-top: 24px; padding: 14px;
+      background: #06c755; color: white; border: none;
+      border-radius: 8px; font-size: 16px; cursor: pointer;
+    }
+    button:disabled { background: #aaa; }
+    #msg { margin-top: 16px; text-align: center; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center">勤怠変更報告</h2>
+
+  <label>名前</label>
+  <input type="text" id="name" placeholder="例：田中 美咲">
+
+  <label>所属部門</label>
+  <select id="dept">
+    <option value="">選択してください</option>
+    <option>外来</option>
+    <option>病棟A</option>
+    <option>病棟B</option>
+    <option>薬局</option>
+    <option>リハビリテーション科</option>
+  </select>
+
+  <label>報告種別</label>
+  <select id="type">
+    <option value="">選択してください</option>
+    <option>欠勤</option>
+    <option>遅刻</option>
+    <option>早退</option>
+    <option>シフト変更</option>
+  </select>
+
+  <label>対象日</label>
+  <input type="date" id="date">
+
+  <label>理由・備考</label>
+  <textarea id="note" rows="3" placeholder="任意"></textarea>
+
+  <button id="btn" onclick="send()">送信する</button>
+  <p id="msg"></p>
+
+  <script>
+    const TOKEN    = "YOUR_TOKEN_HERE";
+    const GROUP_ID = "C43b27229e9ecd2af6aac82e1faeaf831";
+
+    async function send() {
+      const name = document.getElementById('name').value.trim();
+      const dept = document.getElementById('dept').value;
+      const type = document.getElementById('type').value;
+      const date = document.getElementById('date').value;
+      const note = document.getElementById('note').value.trim();
+
+      if (!name || !dept || !type || !date) {
+        document.getElementById('msg').textContent = '必須項目をすべて入力してください。';
+        return;
+      }
+
+      const btn = document.getElementById('btn');
+      btn.disabled = true;
+      btn.textContent = '送信中...';
+
+      const text = `【勤怠変更報告】\n氏名：${name}\n部門：${dept}\n種別：${type}\n対象日：${date}\n理由：${note || 'なし'}`;
+
+      try {
+        const res = await fetch('https://api.line.me/v2/bot/message/push', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + TOKEN
+          },
+          body: JSON.stringify({
+            to: GROUP_ID,
+            messages: [{ type: 'text', text: text }]
+          })
+        });
+
+        if (res.ok) {
+          document.getElementById('msg').textContent = '送信しました。';
+          document.getElementById('msg').style.color = 'green';
+        } else {
+          throw new Error('送信失敗: ' + res.status);
+        }
+      } catch (e) {
+        document.getElementById('msg').textContent = 'エラーが発生しました。管理者に連絡してください。';
+        document.getElementById('msg').style.color = 'red';
+        console.error(e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '送信する';
+      }
+    }
+  </script>
+</body>
+</html>
+EOF
+echo "done"
+出力
+done
+
+
+
+Presented file
+
+
+
+
+
+
+完了
