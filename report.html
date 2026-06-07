@@ -79,7 +79,7 @@ cat > /mnt/user-data/outputs/report.html << 'EOF'
       const text = `【勤怠変更報告】\n氏名：${name}\n部門：${dept}\n種別：${type}\n対象日：${date}\n理由：${note || 'なし'}`;
 
       try {
-        const res = await fetch('https://api.line.me/v2/bot/message/push', {
+        const res = await fetch('https://script.google.com/macros/s/AKfycbzUnVDeYu4CMktFjSi5Eo9bcfsWJfMPvFxS0X28WNFMci10rf2iT97yn_bSshMgs4DbYQ/exec', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
