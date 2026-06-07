@@ -5,69 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>勤怠変更報告</title>
   <style>
-    body { font-family: sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
-    label { display: block; font-size: 14px; color: #555; margin-top: 16px; }
-    input, select, textarea {
-      width: 100%; padding: 10px; margin-top: 4px; font-size: 16px;
-      border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;
+    * { box-sizing: border-box; }
+    body { font-family: sans-serif; max-width: 520px; margin: 0 auto; padding: 16px; background: #f0f0f8; }
+    h2 { text-align: center; color: #333; margin-bottom: 20px; }
+    .card { background: white; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .card-title { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 12px; }
+    label.check { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #333; margin-bottom: 10px; cursor: pointer; }
+    label.check input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; accent-color: #5c6bc0; }
+    input[type=text], textarea {
+      width: 100%; padding: 10px; font-size: 15px;
+      border: none; border-bottom: 1px solid #ccc;
+      outline: none; background: transparent; margin-top: 4px;
     }
     button {
-      width: 100%; margin-top: 24px; padding: 14px;
-      background: #06c755; color: white; border: none;
+      width: 100%; padding: 16px; margin-top: 8px;
+      background: #5c6bc0; color: white; border: none;
       border-radius: 8px; font-size: 16px; cursor: pointer;
     }
     button:disabled { background: #aaa; }
-    #msg { margin-top: 16px; text-align: center; font-size: 14px; }
+    #msg { text-align: center; font-size: 14px; margin-top: 12px; }
   </style>
 </head>
 <body>
-  <h2 style="text-align:center">勤怠変更報告</h2>
-  <label>名前</label>
-  <input type="text" id="name" placeholder="例：田中 美咲">
-  <label>所属部門</label>
-  <select id="dept">
-    <option value="">選択してください</option>
-    <option>外来</option>
-    <option>病棟A</option>
-    <option>病棟B</option>
-    <option>薬局</option>
-    <option>リハビリテーション科</option>
-  </select>
-  <label>報告種別</label>
-  <select id="type">
-    <option value="">選択してください</option>
-    <option>欠勤</option>
-    <option>遅刻</option>
-    <option>早退</option>
-    <option>シフト変更</option>
-  </select>
-  <label>対象日</label>
-  <input type="date" id="date">
-  <label>理由・備考</label>
-  <textarea id="note" rows="3" placeholder="任意"></textarea>
+  <h2>勤怠変更報告</h2>
+  <div class="card">
+    <div class="card-title">部門</div>
+    <label class="check"><input type="checkbox" name="dept" value="PT"> PT</label>
+    <label class="check"><input type="checkbox" name="dept" value="OT"> OT</label>
+    <label class="check"><input type="checkbox" name="dept" value="ST"> ST</label>
+    <label class="check"><input type="checkbox" name="dept" value="MT"> MT</label>
+  </div>
+  <div class="card">
+    <div class="card-title">氏名</div>
+    <input type="text" id="name" placeholder="回答を入力">
+  </div>
+  <div class="card">
+    <div class="card-title">勤務変更内容</div>
+    <label class="check"><input type="checkbox" name="change" value="欠席"> 欠席</label>
+    <label class="check"><input type="checkbox" name="change" value="遅刻"> 遅刻</label>
+    <label class="check"><input type="checkbox" name="change" value="その他"> その他</label>
+  </div>
+  <div class="card">
+    <div class="card-title">体調不良の詳細</div>
+    <label class="check"><input type="checkbox" name="symptom" value="発熱あり"> 発熱あり</label>
+    <label class="check"><input type="checkbox" name="symptom" value="嘔吐、下痢症状あり"> 嘔吐、下痢症状あり</label>
+    <label class="check"><input type="checkbox" name="symptom" value="その他"> その他</label>
+  </div>
+  <div class="card">
+    <div class="card-title">近親者の状況</div>
+    <label class="check"><input type="checkbox" name="family" value="コロナ罹患中"> コロナ罹患中</label>
+    <label class="check"><input type="checkbox" name="family" value="インフルエンザ罹患中"> インフルエンザ罹患中</label>
+    <label class="check"><input type="checkbox" name="family" value="罹患者なし"> 罹患者なし</label>
+  </div>
+  <div class="card">
+    <div class="card-title">受診予定</div>
+    <label class="check"><input type="checkbox" name="visit" value="東和会受診予定"> 東和会受診予定</label>
+    <label class="check"><input type="checkbox" name="visit" value="近医受診予定"> 近医受診予定</label>
+  </div>
+  <div class="card">
+    <div class="card-title">代行患者様</div>
+    <label class="check"><input type="checkbox" name="proxy" value="代行なし（全て休み）"> 代行なし（全て休み）</label>
+    <label class="check"><input type="checkbox" name="proxy" value="入院患者様代行依頼あり"> 入院患者様代行依頼あり</label>
+    <label class="check"><input type="checkbox" name="proxy" value="外来患者様代行依頼あり"> 外来患者様代行依頼あり</label>
+    <label class="check"><input type="checkbox" name="proxy" value="その他"> その他</label>
+  </div>
+  <div class="card">
+    <div class="card-title">代行理由</div>
+    <label class="check"><input type="checkbox" name="proxyreason" value="単科の為"> 単科の為</label>
+    <label class="check"><input type="checkbox" name="proxyreason" value="外来患者様で日程が調整しにくい為"> 外来患者様で日程が調整しにくい為</label>
+    <label class="check"><input type="checkbox" name="proxyreason" value="患者様の希望が強い為"> 患者様の希望が強い為</label>
+    <label class="check"><input type="checkbox" name="proxyreason" value="その他"> その他</label>
+  </div>
+  <div class="card">
+    <div class="card-title">患者様氏名ならびに内容</div>
+    <textarea id="patient" rows="3" placeholder="回答を入力"></textarea>
+  </div>
   <button id="btn" onclick="send()">送信する</button>
   <p id="msg"></p>
   <script>
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbzUnVDeYu4CMktFjSi5Eo9bcfsWJfMPvFxS0X28WNFMci10rf2iT97yn_bSshMgs4DbYQ/exec';
+    function getChecked(name) {
+      return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked'))
+        .map(function(el) { return el.value; }).join('、') || 'なし';
+    }
     async function send() {
       const name = document.getElementById('name').value.trim();
-      const dept = document.getElementById('dept').value;
-      const type = document.getElementById('type').value;
-      const date = document.getElementById('date').value;
-      const note = document.getElementById('note').value.trim();
-      if (!name || !dept || !type || !date) {
-        document.getElementById('msg').textContent = '必須項目をすべて入力してください。';
+      if (!name) {
+        document.getElementById('msg').textContent = '氏名を入力してください。';
+        document.getElementById('msg').style.color = 'red';
         return;
       }
       const btn = document.getElementById('btn');
       btn.disabled = true;
       btn.textContent = '送信中...';
+      const data = {
+        dept: getChecked('dept'),
+        name: name,
+        change: getChecked('change'),
+        symptom: getChecked('symptom'),
+        family: getChecked('family'),
+        visit: getChecked('visit'),
+        proxy: getChecked('proxy'),
+        proxyreason: getChecked('proxyreason'),
+        patient: document.getElementById('patient').value.trim() || 'なし'
+      };
       try {
         await fetch(GAS_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, dept, type, date, note })
+          body: JSON.stringify(data)
         });
         document.getElementById('msg').textContent = '送信しました。';
         document.getElementById('msg').style.color = 'green';
